@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="sim" default="false" />
+  <arg name="gripper" default="pg70" />
+
+  <!-- send urdf to param server -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find prbt_training_cell)/urdf/training_cell_application.xacro' gripper:=$(arg gripper)"/>
+
+  <include file="$(find prbt_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="load_robot_description" value="false"/>
+    <arg name="sim" value="$(arg sim)"/>
+    <arg name="gripper" value="$(arg gripper)"/>
+    <arg name="pipeline" value="pilz_command_planner"/>
+  </include>
+
+</launch>
