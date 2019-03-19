@@ -26,7 +26,7 @@ def start_program():
     transport_pos = [0, math.radians(-115), math.radians(-135), math.radians(90), math.radians(90), 0]
 
     # Move to start point with joint values to avoid random trajectory
-    r.move(Ptp(goal = transport_pos, vel_scale = __ROBOT_VELOCITY__))    # 1st move joint A5
+    r.move(Ptp(goal = transport_pos, vel_scale = __ROBOT_VELOCITY__))    # move to transport position
 
 
 if __name__ == "__main__":
