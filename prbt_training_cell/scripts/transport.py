@@ -23,7 +23,7 @@ def start_program():
     # A4: 90
     # A5: 90
     # A6: 0 
-    transport_pos = [0, math.radians(-115), math.radians(-134), math.radians(90), math.radians(90), 0]
+    transport_pos = [0, math.radians(-115), math.radians(-135), math.radians(90), math.radians(90), 0]
 
     # Move to start point with joint values to avoid random trajectory
     r.move(Ptp(goal = transport_pos, vel_scale = __ROBOT_VELOCITY__))    # 1st move joint A5
