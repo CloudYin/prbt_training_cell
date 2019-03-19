@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+
+<robot name="prbt" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Definition of robot name -->
+  <xacro:arg name="robot_prefix" default="prbt_"/>
+
+  <!-- macro definition of pilz lwa -->
+  <xacro:include filename="$(find prbt_support)/urdf/prbt_macro.xacro" />
+
+    <!-- gripper -->
+  <xacro:arg name="gripper" default=""/>
+  <xacro:property name="gripper" value="$(arg gripper)"/>
+
+  <!-- TCP Offset -->
+  <xacro:if value="${not gripper}">
+    <xacro:arg name="tcp_offset_xyz" default="0 0 0"/>
+    <xacro:arg name="tcp_offset_rpy" default="0 0 0"/>
+  </xacro:if>
+
+  <xacro:if value="${gripper != ''}">
+    <xacro:include filename="$(find prbt_${gripper}_support)/config/${gripper}_tcp_offset.xacro" />
+  </xacro:if>
+
+  <!-- coloring from the stl file -->
+  <material name="yellow">
+    <color rgba="1 1 0 1"/>
+  </material>
+
+  <!-- coloring from the table -->
+  <material name="grey">
+    <color rgba="0.75 0.75 0.75 1"/>
+  </material>
+
+  <!-- instantiate the robot -->
+  <xacro:prbt prefix="prbt_"/>
+
+    <!-- TCP -->
+  <joint name="$(arg robot_prefix)fixed_joint_tcp" type="fixed">
+    <origin xyz="$(arg tcp_offset_xyz)" rpy="$(arg tcp_offset_rpy)" />  <!-- tcp offset from last link -->
+    <parent link="$(arg robot_prefix)flange"/>
+    <child link="$(arg robot_prefix)tcp"/>
+  </joint>
+  <link name="$(arg robot_prefix)tcp" />
+
+  <!-- If gripper given then... -->
+  <xacro:if value="${gripper != ''}">
+    <xacro:include filename="$(find prbt_${gripper}_support)/urdf/${gripper}.urdf.xacro" />
+  </xacro:if>
+
+  <link name="table">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.286 0 -0.03"/>
+      <geometry>
+        <box size="1.1 0.708 0.05"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="table_joint" type="fixed">
+    <parent link="table"/>
+    <child link="prbt_base_link"/>
+  </joint>
+
+
+</robot>
